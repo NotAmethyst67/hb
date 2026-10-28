@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>for prapti ♡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.ico">
+</head>
+<body>
+  <!-- Ambient grain & star particle canvas -->
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+  <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+  <canvas id="heartsCanvas" class="hearts-canvas" aria-hidden="true"></canvas>
+
+  <!-- Audio elements -->
+  <audio id="voiceAudio" playsinline preload="auto"></audio>
+  <audio id="bgMusicAudio" playsinline preload="auto" loop></audio>
+
+  <!-- Top Navigation HUD -->
+  <header class="app-hud" id="appHud">
+    <div class="hud-brand">for prapti ♡</div>
+    <button class="hud-music-pill" id="btnHudMusic" type="button" aria-label="Toggle background music">
+      <span class="music-note-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px;">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+      </span>
+      <span class="music-wave-bars" id="hudMusicBars">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="music-track-title" id="hudMusicTitle">tame impala ♡</span>
+    </button>
+  </header>
+
+  <main class="experience" id="experience" role="main">
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 1: OPENING
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene scene--active" id="scene-opening" data-scene="opening">
+      <div class="opening-card">
+        <div class="opening-badge">october 28 ♡ a special day</div>
+        <h1 class="opening-heading">hey, prapti</h1>
+        <p class="opening-sub">someone who cares about you made a little world just for you today.</p>
+        <button class="btn btn--golden" id="btn-start" type="button">
+          <span>open your little surprise</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 2: CHATS (Luxury Tae ↔ Prapti Messaging)
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene" id="scene-chat" data-scene="chat">
+      <div class="chat-frame">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="tae-avatar-container">
+            <img class="tae-avatar" id="taeAvatar" src="assets/v.jpg" alt="Kim Taehyung">
+            <span class="tae-status-dot"></span>
+          </div>
+          <div class="chat-header-text">
+            <div class="chat-user-name">
+              Kim Taehyung
+              <span class="verified-badge">✓</span>
+            </div>
+            <div class="chat-user-status" id="chatStatus">Online ♡</div>
+          </div>
+          <div class="tae-voice-wave" id="taeVoiceWave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- Chat Feed -->
+        <div class="chat-feed" id="chatFeed" role="log" aria-live="polite"></div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-bubble" id="typingIndicator" style="display:none;">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="typing-label" id="typingLabel">Tae is typing...</span>
+        </div>
+
+        <!-- Prapti Quick Reply Container -->
+        <div class="chat-reply-bar" id="chatReplyBar" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 3: CAKE CUTTING & POPPERS
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene" id="scene-cake" data-scene="cake">
+      <!-- Spotlight illumination overlay -->
+      <div class="spotlight-overlay" aria-hidden="true"></div>
+
+      <div class="cake-wrapper" id="cakeWrapper">
+        <div class="cake-instruction-block">
+          <p class="cake-instruction" id="cakeInstruction">make a wish, prapti ♡</p>
+          <span class="cake-hint" id="cakeHint">tap the candles to blow them out ♡</span>
+        </div>
+
+        <!-- The 3D Celebration Cake Stage -->
+        <div class="cake-table-stage" id="cakeTableStage">
+          <!-- Floating Luxury Knife -->
+          <div class="cake-knife" id="cakeKnife" role="button" aria-label="Cake Knife">
+            <svg viewBox="0 0 70 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bladeGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="40%" stop-color="#ede5f8"/>
+                  <stop offset="100%" stop-color="#c9b6e4"/>
+                </linearGradient>
+                <linearGradient id="handleGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#360a14"/>
+                  <stop offset="50%" stop-color="#6b1d2f"/>
+                  <stop offset="100%" stop-color="#18141d"/>
+                </linearGradient>
+              </defs>
+              <!-- Blade with sharp reflection and wine-lavender handle -->
+              <path d="M35 6 L40 6 L38 82 L32 82 Z" fill="url(#bladeGrad)"/>
+              <path d="M34 8 L36.5 8 L35.5 80 Z" fill="#ffffff" opacity="0.95"/>
+              <rect x="29" y="82" width="12" height="6" rx="2" fill="#c9b6e4"/>
+              <rect x="31" y="88" width="8" height="44" rx="4" fill="url(#handleGrad)"/>
+            </svg>
+          </div>
+
+          <!-- Luxury 3D Tiered Cake SVG -->
+          <svg class="cake-svg" id="cakeSvg" viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Luxury Matte Black / Deep Wine Pedestal Stand -->
+              <linearGradient id="luxuryStand" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#151419"/>
+                <stop offset="25%" stop-color="#360a14"/>
+                <stop offset="50%" stop-color="#c9b6e4"/>
+                <stop offset="75%" stop-color="#45101d"/>
+                <stop offset="100%" stop-color="#121212"/>
+              </linearGradient>
+              <!-- Bottom Tier: Wine Velvet Base -->
+              <linearGradient id="tierBottom" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8a2840"/>
+                <stop offset="70%" stop-color="#6b1d2f"/>
+                <stop offset="100%" stop-color="#45101d"/>
+              </linearGradient>
+              <!-- Middle Tier: Lavender Silk Tier -->
+              <linearGradient id="tierMiddle" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ede5f8"/>
+                <stop offset="70%" stop-color="#d8c8ed"/>
+                <stop offset="100%" stop-color="#c9b6e4"/>
+              </linearGradient>
+              <!-- Top Tier: Pure White Royal Cream -->
+              <linearGradient id="tierTop" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="70%" stop-color="#faf8fc"/>
+                <stop offset="100%" stop-color="#ede5f8"/>
+              </linearGradient>
+              <!-- Glistening Wine Ganache Drips -->
+              <linearGradient id="ganacheDrip" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8a2840"/>
+                <stop offset="100%" stop-color="#45101d"/>
+              </linearGradient>
+              <!-- Lavender Artisan Candles -->
+              <linearGradient id="candleBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#9d8bb8"/>
+                <stop offset="35%" stop-color="#ede5f8"/>
+                <stop offset="70%" stop-color="#c9b6e4"/>
+                <stop offset="100%" stop-color="#6b1d2f"/>
+              </linearGradient>
+              <!-- Warm Fire Flame -->
+              <linearGradient id="flameColor" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#ff3b60"/>
+                <stop offset="30%" stop-color="#ff8c60"/>
+                <stop offset="70%" stop-color="#fff0b8"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+              <radialGradient id="flameHalo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(255, 255, 255, 0.85)"/>
+                <stop offset="45%" stop-color="rgba(201, 182, 228, 0.35)"/>
+                <stop offset="100%" stop-color="rgba(107, 29, 47, 0)"/>
+              </radialGradient>
+              <filter id="cakeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+                <feOffset dx="0" dy="12"/>
+                <feComponentTransfer><feFuncA type="table" tableValues="0 0.45"/></feComponentTransfer>
+                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Table Plate Shadow & Luxury Pedestal (Wine / Lavender / Matte Black) -->
+            <ellipse cx="210" cy="340" rx="165" ry="26" fill="rgba(0,0,0,0.6)" filter="blur(10px)"/>
+            <path d="M190 325 L180 345 L240 345 L230 325 Z" fill="url(#luxuryStand)"/>
+            <ellipse cx="210" cy="345" rx="65" ry="12" fill="url(#luxuryStand)"/>
+            <ellipse cx="210" cy="324" rx="150" ry="24" fill="url(#luxuryStand)"/>
+            <ellipse cx="210" cy="320" rx="145" ry="20" fill="#ffffff" stroke="#c9b6e4" stroke-width="1.2"/>
+
+            <!-- TIER 1 (Bottom Tier: Wine Velvet) -->
+            <g id="cakeTierBottom" filter="url(#cakeGlow)">
+              <path d="M75 235 C75 205 345 205 345 235 L345 295 C345 322 75 322 75 295 Z" fill="url(#tierBottom)"/>
+              <ellipse cx="210" cy="235" rx="135" ry="25" fill="#a4324e"/>
+              <!-- Lavender and White piped pearls -->
+              <g>
+                <circle cx="88" cy="285" r="4.5" fill="#ede5f8"/><circle cx="120" cy="298" r="4.5" fill="#c9b6e4"/><circle cx="160" cy="306" r="4.5" fill="#ffffff"/>
+                <circle cx="210" cy="309" r="5" fill="#ede5f8"/><circle cx="260" cy="306" r="4.5" fill="#ffffff"/><circle cx="300" cy="298" r="4.5" fill="#c9b6e4"/>
+                <circle cx="332" cy="285" r="4.5" fill="#ede5f8"/>
+              </g>
+            </g>
+
+            <!-- TIER 2 (Middle Tier: Lavender Silk) -->
+            <g id="cakeTierMiddle">
+              <path d="M100 165 C100 138 320 138 320 165 L320 225 C320 248 100 248 100 225 Z" fill="url(#tierMiddle)"/>
+              <ellipse cx="210" cy="165" rx="110" ry="22" fill="#ede5f8"/>
+              <!-- Glossy Wine ganache drips -->
+              <path d="M100 168 Q115 195 130 170 Q148 202 165 172 Q188 208 210 172 Q232 205 255 172 Q275 198 295 170 Q308 192 320 168" fill="none" stroke="url(#ganacheDrip)" stroke-width="5" stroke-linecap="round"/>
+            </g>
+
+            <!-- TIER 3 (Top Tier: Pure White) -->
+            <g id="cakeTierTop">
+              <path d="M130 105 C130 82 290 82 290 105 L290 158 C290 175 130 175 130 158 Z" fill="url(#tierTop)"/>
+              <ellipse cx="210" cy="105" rx="80" ry="18" fill="#ffffff"/>
+              <!-- Lavender sugar pearls border -->
+              <g fill="#c9b6e4">
+                <circle cx="140" cy="112" r="3.5" fill="#ede5f8"/><circle cx="165" cy="119" r="3.5"/><circle cx="190" cy="122" r="3.5" fill="#ffffff"/>
+                <circle cx="210" cy="123" r="4" fill="#ede5f8"/><circle cx="230" cy="122" r="3.5" fill="#ffffff"/><circle cx="255" cy="119" r="3.5"/>
+                <circle cx="280" cy="112" r="3.5" fill="#ede5f8"/>
+              </g>
+              <!-- Wine Berries on top tier -->
+              <g fill="#6b1d2f">
+                <circle cx="175" cy="98" r="6.5"/><circle cx="210" cy="94" r="7.5"/><circle cx="245" cy="98" r="6.5"/>
+              </g>
+            </g>
+
+            <!-- Clean Sliced Cut Groove (no separate floating piece) -->
+            <g id="cakeCutGroup" style="display:none;">
+              <line id="cakeCutLine" x1="210" y1="105" x2="210" y2="320" stroke="rgba(201,182,228,0.95)" stroke-width="3" stroke-linecap="round"/>
+              <line x1="210" y1="105" x2="210" y2="320" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="5 3"/>
+              <circle cx="210" cy="105" r="3.5" fill="#ffffff"/>
+              <circle cx="210" cy="215" r="4" fill="#c9b6e4"/>
+              <circle cx="210" cy="320" r="3.5" fill="#ffffff"/>
+            </g>
+
+            <!-- 5 GOLDEN BIRTHDAY CANDLES -->
+            <g id="cakeCandles">
+              <!-- Candle 1 -->
+              <g class="candle-unit" data-candle="0" transform="translate(155, 52)">
+                <rect x="0" y="14" width="6" height="36" rx="2" fill="url(#candleBody)"/>
+                <line x1="3" y1="14" x2="3" y2="7" stroke="#222" stroke-width="1.5"/>
+                <ellipse class="flame-halo" cx="3" cy="3" rx="15" ry="15" fill="url(#flameHalo)"/>
+                <path class="candle-flame" d="M3 -4 Q6 3 3 8 Q0 3 3 -4 Z" fill="url(#flameColor)"/>
+              </g>
+              <!-- Candle 2 -->
+              <g class="candle-unit" data-candle="1" transform="translate(180, 44)">
+                <rect x="0" y="14" width="6" height="42" rx="2" fill="url(#candleBody)"/>
+                <line x1="3" y1="14" x2="3" y2="7" stroke="#222" stroke-width="1.5"/>
+                <ellipse class="flame-halo" cx="3" cy="3" rx="17" ry="17" fill="url(#flameHalo)"/>
+                <path class="candle-flame" d="M3 -5 Q6.5 3 3 8 Q-0.5 3 3 -5 Z" fill="url(#flameColor)"/>
+              </g>
+              <!-- Candle 3 (Center) -->
+              <g class="candle-unit" data-candle="2" transform="translate(207, 38)">
+                <rect x="0" y="14" width="7" height="46" rx="2" fill="url(#candleBody)"/>
+                <line x1="3.5" y1="14" x2="3.5" y2="7" stroke="#222" stroke-width="1.5"/>
+                <ellipse class="flame-halo" cx="3.5" cy="3" rx="19" ry="19" fill="url(#flameHalo)"/>
+                <path class="candle-flame" d="M3.5 -6 Q7.5 3 3.5 8 Q-0.5 3 3.5 -6 Z" fill="url(#flameColor)"/>
+              </g>
+              <!-- Candle 4 -->
+              <g class="candle-unit" data-candle="3" transform="translate(234, 44)">
+                <rect x="0" y="14" width="6" height="42" rx="2" fill="url(#candleBody)"/>
+                <line x1="3" y1="14" x2="3" y2="7" stroke="#222" stroke-width="1.5"/>
+                <ellipse class="flame-halo" cx="3" cy="3" rx="17" ry="17" fill="url(#flameHalo)"/>
+                <path class="candle-flame" d="M3 -5 Q6.5 3 3 8 Q-0.5 3 3 -5 Z" fill="url(#flameColor)"/>
+              </g>
+              <!-- Candle 5 -->
+              <g class="candle-unit" data-candle="4" transform="translate(259, 52)">
+                <rect x="0" y="14" width="6" height="36" rx="2" fill="url(#candleBody)"/>
+                <line x1="3" y1="14" x2="3" y2="7" stroke="#222" stroke-width="1.5"/>
+                <ellipse class="flame-halo" cx="3" cy="3" rx="15" ry="15" fill="url(#flameHalo)"/>
+                <path class="candle-flame" d="M3 -4 Q6 3 3 8 Q0 3 3 -4 Z" fill="url(#flameColor)"/>
+              </g>
+            </g>
+
+            <!-- Smoke container -->
+            <g id="cakeSmoke"></g>
+          </svg>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div class="cake-controls">
+          <button class="btn btn--golden" id="btnBlowCandles" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v3M10 7h4v13a2 2 0 0 1-2 2h0a2 2 0 0 1-2-2V7z"/>
+              <circle cx="12" cy="3" r="1" fill="currentColor"/>
+            </svg>
+            <span>blow out candles</span>
+          </button>
+          <button class="btn btn--golden" id="btnCutCake" type="button" style="display:none;">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20h16M6 20v-7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7M8 11V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4M12 2v3"/>
+            </svg>
+            <span>cut the cake</span>
+          </button>
+        </div>
+
+        <!-- Celebration Banner & Poppers Overlay -->
+        <div class="celebration-banner" id="celebrationBanner" style="display:none;">
+          <div class="banner-poppers">
+            <svg class="celebration-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 36l6-18 6 18-6-3-6 3z" fill="var(--wine-light)" stroke="var(--lavender)"/>
+              <path d="M26 14l2-6 2 6-2 1-2-1z" fill="var(--lavender)"/>
+              <path d="M36 22l1-4 2 3-3 1z" fill="var(--white)"/>
+              <path d="M20 8c4 2 8-2 12 0s2 8 6 10" stroke="var(--lavender)" stroke-dasharray="2 2"/>
+            </svg>
+          </div>
+          <h2 class="banner-title">HAPPY BIRTHDAY, PRAPTI!</h2>
+          <p class="banner-sub">the magic is just beginning...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 4: GRAND THEATRE STAGE & VELVET CURTAINS
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene" id="scene-stage" data-scene="stage">
+      <div class="theatre-stage-proscenium">
+        <!-- Golden Stage Valance top -->
+        <div class="stage-valance">
+          <div class="valance-fringe"></div>
+        </div>
+
+        <!-- Velvet Curtains -->
+        <div class="curtain-container" id="curtainContainer">
+          <div class="curtain-panel curtain-panel--left" id="curtainLeft">
+            <div class="curtain-fold"></div><div class="curtain-fold"></div>
+            <div class="curtain-fold"></div><div class="curtain-fold"></div>
+            <div class="curtain-fold"></div>
+          </div>
+          <div class="curtain-panel curtain-panel--right" id="curtainRight">
+            <div class="curtain-fold"></div><div class="curtain-fold"></div>
+            <div class="curtain-fold"></div><div class="curtain-fold"></div>
+            <div class="curtain-fold"></div>
+          </div>
+        </div>
+
+        <!-- Golden Pull Cord -->
+        <div class="curtain-cord-wrap" id="curtainCordWrap">
+          <div class="curtain-cord" id="curtainCord" role="button" tabindex="0" aria-label="Pull the curtain cord">
+            <div class="cord-string"></div>
+            <div class="cord-knot"></div>
+            <div class="cord-tassel">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <p class="cord-hint" id="cordHint">pull to open the stage ♡</p>
+        </div>
+
+        <!-- Stage Footlights along bottom -->
+        <div class="stage-footlights">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 4B: PHOTO HEART MOSAIC & NOTAMETHYST DEDICATION
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene" id="scene-heart" data-scene="heart">
+      <div class="heart-scene-container">
+        <!-- Expanding Heart Mosaic of All Photos -->
+        <div class="photo-heart-mosaic" id="photoHeartMosaic"></div>
+
+        <!-- Typewriter Birthday Dedication Card -->
+        <div class="heart-dedication-card" id="heartDedicationCard">
+          <div class="dedication-badge">a special wish ♡</div>
+          <h2 class="dedication-title" id="typewriterTitle"></h2>
+          <p class="dedication-body" id="typewriterBody"></p>
+          <p class="dedication-sign" id="typewriterSign"></p>
+          <button class="btn btn--golden" id="btnEnterShowcase" type="button" style="display:none;">
+            <span>step into your memories ♡</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCENE 5: GRAND CINEMATIC MEMORY SHOWCASE
+         ═══════════════════════════════════════════════════ -->
+    <section class="scene" id="scene-gallery" data-scene="gallery">
+      <!-- Ambient stage glow -->
+      <div class="showcase-ambient-glow" aria-hidden="true"></div>
+
+      <div class="showcase-stage-wrap">
+        <!-- Minimalist Elegance Header -->
+        <div class="showcase-header">
+          <div class="showcase-badge">prapti's gallery ♡</div>
+          <div class="showcase-counter">
+            <span id="galleryIdx">1</span> / <span id="galleryTotal">44</span>
+          </div>
+          <!-- Thin golden progress line -->
+          <div class="showcase-progress-track">
+            <div class="showcase-progress-bar" id="showcaseProgressBar"></div>
+          </div>
+        </div>
+
+        <!-- The 3D Spatial Coverflow Stage Area -->
+        <div class="showcase-stage-area" id="showcaseStageArea">
+          <!-- Left / Previous Navigation Arrow (Isolated from 3D tilts, reliable hit-testing) -->
+          <button class="showcase-arrow showcase-arrow--prev" id="btnPrevPhoto" type="button" aria-label="Previous Photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- 3D Spatial Stage -->
+          <div class="showcase-3d-stage" id="showcase3dStage">
+            <!-- Left / Previous 3D Card in Depth -->
+            <div class="deck-card deck-card--prev" id="deckCardPrev" role="button" tabindex="0" aria-label="Previous photo">
+              <div class="deck-card-backdrop" id="deckBackdropPrev"></div>
+              <img class="deck-card-img" id="deckImgPrev" src="" alt="Previous photo">
+              <div class="deck-card-tint"></div>
+            </div>
+
+            <!-- Center Active 9:16 Frame with Interactive Parallax -->
+            <div class="deck-card deck-card--center" id="showcaseFrame">
+              <!-- Atmospheric blurred backdrop of current photo -->
+              <div class="showcase-backdrop" id="showcaseBackdrop"></div>
+              <!-- Cinematic Anamorphic Light Leak Streak -->
+              <div class="showcase-light-leak" id="showcaseLightLeak"></div>
+              <!-- Interactive Holographic Specular Glare -->
+              <div class="showcase-glare" id="showcaseGlare"></div>
+
+              <!-- Uncropped Full Photo with Ken Burns Motion -->
+              <img class="showcase-photo" id="showcasePhoto" src="" alt="Prapti">
+
+              <!-- Elegant Floating Caption Overlay -->
+              <div class="showcase-caption-overlay">
+                <p class="showcase-caption" id="showcaseCaption">a smile that lights up everything ♡</p>
+              </div>
+            </div>
+
+            <!-- Right / Next 3D Card in Depth -->
+            <div class="deck-card deck-card--next" id="deckCardNext" role="button" tabindex="0" aria-label="Next photo">
+              <div class="deck-card-backdrop" id="deckBackdropNext"></div>
+              <img class="deck-card-img" id="deckImgNext" src="" alt="Next photo">
+              <div class="deck-card-tint"></div>
+            </div>
+          </div>
+
+          <!-- Right / Next Navigation Arrow (Isolated from 3D tilts, reliable hit-testing) -->
+          <button class="showcase-arrow showcase-arrow--next" id="btnNextPhoto" type="button" aria-label="Next Photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Dynamic Mini Filmstrip Timeline -->
+        <div class="filmstrip-wrap" id="filmstripWrap" aria-label="Photo timeline">
+          <div class="filmstrip-track" id="filmstripTrack"></div>
+        </div>
+
+        <!-- Showcase Footer: Final Card & 3D Cosmos Toggle -->
+        <div class="showcase-footer">
+          <button class="btn btn--golden btn--sm" id="btnOpenFinalCard" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>final card ♡</span>
+          </button>
+          <button class="btn btn--elegant btn--sm" id="btnToggleGalaxy" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M3 12a9 9 0 0 1 18 0M3 12a9 9 0 0 0 18 0" stroke-dasharray="2 2"/>
+            </svg>
+            <span id="galaxyToggleLabel">3d cosmos</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3D Photo Cosmos / Galaxy Viewport (Toggleable crazy mode) -->
+      <div class="galaxy-viewport" id="galaxyViewport" style="display:none;">
+        <button class="galaxy-close-btn btn btn--golden btn--sm" id="btnCloseGalaxy" type="button" aria-label="Leave 3D Space">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+          <span>leave 3D space</span>
+        </button>
+        <div class="galaxy-hint">drag to orbit · click any memory to view ♡</div>
+        <div class="galaxy-pivot" id="galaxyPivot">
+          <div class="galaxy-cylinder" id="galaxyCylinder"></div>
+        </div>
+      </div>
+
+      <!-- Grand Finale Birthday Letter Card -->
+      <div class="letter-modal" id="letterModal" style="display:none;">
+        <div class="letter-card">
+          <button class="modal-close-icon" id="btnCloseLetter" type="button" aria-label="Close letter">✕</button>
+          <div class="letter-stamp">2026 ♡</div>
+          <h2 class="letter-title" id="letterTitle">To Prapti ♡</h2>
+          <div class="letter-body" id="letterBody"></div>
+          <p class="letter-from" id="letterFrom"></p>
+          <div class="letter-actions">
+            <button class="btn btn--golden" id="btnReplayAll" type="button">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+              <span>replay celebration</span>
+            </button>
+            <button class="btn btn--elegant" id="btnBackToGallery" type="button">
+              <span>back to gallery ♡</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
